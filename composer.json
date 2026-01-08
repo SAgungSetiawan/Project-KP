@@ -8,7 +8,9 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "ext-pdo": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -32,6 +34,16 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "@php artisan key:generate --force",
+            "@php artisan storage:link"
+        ],
+        "post-deploy": [
+            "@php artisan migrate --force",
+            "@php artisan config:cache",
+            "@php artisan route:cache",
+            "@php artisan view:cache"
+        ],
         "setup": [
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
@@ -79,7 +91,11 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        }
+        },
+        "platform": {
+            "php": "8.2"
+        },
+        "process-timeout": 600
     },
     "minimum-stability": "stable",
     "prefer-stable": true

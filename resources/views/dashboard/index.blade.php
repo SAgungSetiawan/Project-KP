@@ -116,7 +116,7 @@
             <p class="text-sm text-gray-500">Lihat dan edit semua client</p>
         </a>
         
-        <a href="{{ route('dashboard') }}" 
+        <a href="{{ route('statistik.index') }}" 
            class="border-2 border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 hover:bg-indigo-50 transition">
             <i class="fas fa-chart-bar text-3xl text-gray-400 mb-2"></i>
             <p class="font-semibold">Lihat Statistik</p>

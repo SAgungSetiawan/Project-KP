@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataClientController;
 use App\Http\Controllers\ClientController; // Tambahkan ini
+use App\Http\Controllers\StatistikController;
 
 // Welcome Page
 Route::get('/', [AuthController::class, 'welcome'])->name('welcome');
@@ -37,5 +38,12 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Statistics
-    Route::get('/statistics', [DashboardController::class, 'statistics'])->name('dashboard.statistics');
+    //Route::get('/statistics', [DashboardController::class, 'statistics'])->name('dashboard.statistics');
+
+
+    Route::prefix('statistik')->name('statistik.')->group(function () {
+    Route::get('/', [StatistikController::class, 'index'])->name('index');
+    Route::get('/data', [StatistikController::class, 'getStatisticsData'])->name('data');
+    Route::get('/download', [StatistikController::class, 'downloadCSV'])->name('download');
+});
 });

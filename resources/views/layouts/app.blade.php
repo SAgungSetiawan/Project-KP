@@ -404,8 +404,8 @@
                            href="{{ route('add-clients.create') }}">
                             <i class="bi bi-person-plus me-2"></i> Tambah Client
                         </a>
-                        <a class="nav-link {{ request()->routeIs('dashboard.statistics') ? 'active' : '' }}" 
-                           href="{{ route('dashboard.statistics') }}">
+                        <a class="nav-link {{ request()->routeIs('statistik.index') ? 'active' : '' }}" 
+                           href="{{ route('statistik.index') }}">
                             <i class="bi bi-bar-chart me-2"></i> Statistik
                         </a>
                     </nav>
