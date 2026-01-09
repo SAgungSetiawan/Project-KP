@@ -70,10 +70,30 @@
                                 <td>{{ $client->notes }}</td>
                              
                                 <td>
-                                    <span class="badge badge-{{ $client->status == 'active' ? 'active' : 'inactive' }}">
-                                        {{ ucfirst($client->status) }}
-                                    </span>
-                                </td>
+    <form action="{{ route('data-client.update-status', $client->id) }}" method="POST">
+        @csrf
+        @method('PATCH')
+
+        <span class="badge 
+            {{ $client->status == 'active' ? 'badge-active' : 'badge-inactive' }}">
+            
+            {{ ucfirst($client->status) }}
+
+            <select name="status"
+                    onchange="this.form.submit()"
+                    class="status-select">
+                <option value="active" {{ $client->status == 'active' ? 'selected' : '' }}>
+                    Active
+                </option>
+                <option value="inactive" {{ $client->status == 'inactive' ? 'selected' : '' }}>
+                    Inactive
+                </option>
+            </select>
+        </span>
+    </form>
+</td>
+
+
                                 <td>{{ $client->created_at->format('d M Y') }}</td>
                                 <td>
                                     <div class="btn-group" role="group">

@@ -7,14 +7,13 @@ use App\Http\Controllers\DataClientController;
 use App\Http\Controllers\ClientController; // Tambahkan ini
 use App\Http\Controllers\StatistikController;
 
-// Welcome Page
+// LOGIN PAGE (WELCOME)
 Route::get('/', [AuthController::class, 'welcome'])->name('welcome');
 
-// Authentication Routes
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+// PROSES LOGIN
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+// LOGOUT
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected Dashboard Routes
@@ -23,13 +22,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Clients Management
-    Route::prefix('data-client')->name('data-client.')->group(function () {
-        Route::get('/', [DataClientController::class, 'index'])->name('index');
-        Route::get('/{id}', [DataClientController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [DataClientController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [DataClientController::class, 'update'])->name('update');
-        Route::delete('/{id}', [DataClientController::class, 'destroy'])->name('destroy');
-    });
+Route::prefix('data-client')->name('data-client.')->group(function () {
+
+    Route::get('/', [DataClientController::class, 'index'])->name('index');
+    Route::get('/{id}', [DataClientController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [DataClientController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [DataClientController::class, 'update'])->name('update');
+    Route::delete('/{id}', [DataClientController::class, 'destroy'])->name('destroy');
+
+    // ✅ UPDATE STATUS (ACTIVE / INACTIVE)
+    Route::patch('/{id}/status', 
+        [DataClientController::class, 'updateStatus']
+    )->name('update-status');
+
+});
+
     
     // Tambah Client Routes (menggunakan ClientController baru)
     Route::prefix('add-clients')->name('add-clients.')->group(function () {

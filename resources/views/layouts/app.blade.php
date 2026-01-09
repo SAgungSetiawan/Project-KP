@@ -231,14 +231,29 @@
         }
         
         .badge-active {
-            background-color: var(--color-success);
-            color: white;
-        }
-        
-        .badge-inactive {
-            background-color: #6c757d;
-            color: white;
-        }
+    background-color: var(--color-success);
+    color: white;
+    position: relative;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.badge-inactive {
+    background-color: #6c757d;
+    color: white;
+    position: relative;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+/* SELECT TRANSPARAN */
+.status-select {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
         
         .form-control:focus {
             border-color: var(--color-primary);

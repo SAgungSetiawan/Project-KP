@@ -69,6 +69,20 @@ class DataClientController extends Controller
             ->with('success', 'Data klien berhasil diperbarui');
     }
 
+    public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:active,inactive'
+    ]);
+
+    $client = Client::findOrFail($id);
+    $client->status = $request->status;
+    $client->save();
+
+    return redirect()->back()->with('success', 'Status klien berhasil diperbarui.');
+}
+
+
     /**
      * Hapus data klien
      */
