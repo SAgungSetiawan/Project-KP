@@ -36,7 +36,7 @@ class DataClientController extends Controller
     public function show($id)
     {
         $client = Client::findOrFail($id);
-        return view('data-client.show', compact('client'));
+        return view('data-client.show-client', compact('client'));
     }
 
     /**
@@ -45,7 +45,7 @@ class DataClientController extends Controller
     public function edit($id)
     {
         $client = Client::findOrFail($id);
-        return view('data-client.edit', compact('client'));
+        return view('data-client.edit-client', compact('client'));
     }
 
     /**
@@ -59,7 +59,7 @@ class DataClientController extends Controller
             'telepon' => 'required|string|max:20',
             'perusahaan' => 'required|string|max:255',
             'alamat' => 'nullable|string',
-            'status' => 'required|in:aktif,nonaktif',
+            'status' => 'required|in:active,inactive',
         ]);
 
         $client = Client::findOrFail($id);
