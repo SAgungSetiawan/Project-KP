@@ -23,8 +23,8 @@ class DashboardController extends Controller
 
         
         // Klien Baru bulan ini - AMBIL dari start_date
-        $newClientsThisMonth = Client::whereMonth('created_at', date('m'))
-            ->whereYear('created_at', date('Y'))
+        $newClientsThisMonth = Client::whereMonth('start_date', date('m'))
+            ->whereYear('start_date', date('Y'))
             ->count();
         
         // Klien Baru (dalam 30 hari) - AMBIL dari start_date
