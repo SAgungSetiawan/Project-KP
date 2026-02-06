@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataClientController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\StatistikController;
+use App\Http\Controllers\InvoiceController;
 
 // ============================================
 // PUBLIC ROUTES (Guest Only)
@@ -54,6 +55,11 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/{id}/status', [DataClientController::class, 'updateStatus'])
          ->name('update-status');
 });
+
+// routes/web.php
+Route::get('/invoices/{invoice}/show', [InvoiceController::class, 'show'])->name('invoices.show');
+Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download'])->name('invoices.download');
+
     // ============================================
     // ADD NEW CLIENT (Separate Controller)
     // ============================================

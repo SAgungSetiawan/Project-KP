@@ -14,24 +14,29 @@ class DashboardController extends Controller
         $totalClients = Client::count();
         
         // Klien Aktif
-        $activeClients = Client::where('status', 'active')->count();
-        $InactiveClients = Client::where('status', 'non active')->count();
+       $activeClients = Client::all()
+    ->filter(fn ($c) => $c->auto_status === 'aktif')
+    ->count();
+
+
+        $InactiveClients = Client::whereIn('status', ['non aktif', 'belum aktif'])->count();
+
         
-        // Klien Baru bulan ini - AMBIL dari join_date
-        $newClientsThisMonth = Client::whereMonth('join_date', date('m'))
-            ->whereYear('join_date', date('Y'))
+        // Klien Baru bulan ini - AMBIL dari start_date
+        $newClientsThisMonth = Client::whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))
             ->count();
         
-        // Klien Baru (dalam 30 hari) - AMBIL dari join_date
-        $newClients = Client::where('join_date', '>=', now()->subDays(30))->count();
+        // Klien Baru (dalam 30 hari) - AMBIL dari start_date
+        $newClients = Client::where('created_at', '>=', now()->subDays(30))->count();
         
-        // Statistik bulanan - AMBIL dari join_date TANPA MINUS
+        // Statistik bulanan - AMBIL dari start_date TANPA MINUS
         $monthlyStats = $this->getMonthlyStats();
         
-        // Recent Clients (5 data terbaru berdasarkan join_date)
-        $recentClients = Client::orderBy('join_date', 'desc')
+        // Recent Clients (5 data terbaru berdasarkan start_date)
+        $recentClients = Client::orderBy('created_at', 'desc')
             ->take(2)
-            ->get(['id', 'name', 'email', 'category', 'join_date', 'status']);
+            ->get(['id', 'name','nama_brand', 'email', 'category', 'created_at', 'status']);
         
         return view('dashboard.index', compact(
             'totalClients',
@@ -51,13 +56,13 @@ class DashboardController extends Controller
         
         $monthlyStats = [];
         
-        // Ambil data dari database - GUNAKAN join_date
+        // Ambil data dari database - GUNAKAN start_date
         $data = Client::select(
-                DB::raw('MONTH(join_date) as month'),
+                DB::raw('MONTH(start_date) as month'),
                 DB::raw('COUNT(*) as total')
             )
-            ->whereYear('join_date', $year)
-            ->whereNotNull('join_date') // Pastikan join_date tidak null
+            ->whereYear('start_date', $year)
+            ->whereNotNull('start_date') // Pastikan start_date tidak null
             ->groupBy('month')
             ->orderBy('month')
             ->get()

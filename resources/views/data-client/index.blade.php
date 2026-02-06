@@ -13,29 +13,41 @@
             <h6 class="m-0 font-weight-bold text-primary">Daftar Klien</h6>
             
             <!-- Pencarian -->
-            <form action="{{ route('data-client.index') }}" method="GET" class="d-flex">
-                <div class="input-group">
-                    <input type="text" 
-                           name="search" 
-                           class="form-control" 
-                           placeholder="Cari klien..." 
-                           value="{{ request('search') }}"
-                           style="width: 300px;">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-primary" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                        @if(request('search'))
-                            <a href="{{ route('data-client.index') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times"></i>
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </form>
+            <form action="{{ route('data-client.index') }}" method="GET" class="d-flex gap-2">
+    <input type="text"
+           name="search"
+           class="form-control"
+           placeholder="Cari klien..."
+           value="{{ request('search') }}"
+           style="width: 250px;">
+
+    <select name="status" class="form-control" style="width: 160px;">
+        <option value="">Semua Status</option>
+        <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>
+            Aktif
+        </option>
+        <option value="non aktif" {{ request('status') == 'non aktif' ? 'selected' : '' }}>
+            Nonaktif
+        </option>
+        <option value="belum aktif" {{ request('status') == 'belum aktif' ? 'selected' : '' }}>
+            Belum Aktif
+        </option>
+    </select>
+
+    <button class="btn btn-outline-primary" type="submit">
+        <i class="fas fa-search"></i>
+    </button>
+
+    @if(request('search') || request('status'))
+        <a href="{{ route('data-client.index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-times"></i>
+        </a>
+    @endif
+</form>
+
         </div>
 
-        <div class="card-body">
+        <!-- <div class="card-body">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -43,7 +55,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            @endif
+            @endif -->
 
             <!-- Tabel Klien -->
             <div class="table-responsive">
@@ -68,30 +80,14 @@
                                 <td>{{ $client->phone }}</td>
                                 <td>{{ $client->category }}</td>
                                 <td>{{ $client->notes }}</td>
-                             
-                                <td>
-    <form action="{{ route('data-client.update-status', $client->id) }}" method="POST">
-        @csrf
-        @method('PATCH')
+    <td>
+    <span class="badge 
+    {{ $client->status === 'aktif' ? 'badge-active' : 'badge-inactive' }}">
+    {{ ucfirst($client->status) }}
+</span>
 
-        <span class="badge 
-            {{ $client->status == 'active' ? 'badge-active' : 'badge-inactive' }}">
-            
-            {{ ucfirst($client->status) }}
-
-            <select name="status"
-                    onchange="this.form.submit()"
-                    class="status-select">
-                <option value="active" {{ $client->status == 'active' ? 'selected' : '' }}>
-                    Active
-                </option>
-                <option value="inactive" {{ $client->status == 'inactive' ? 'selected' : '' }}>
-                    Inactive
-                </option>
-            </select>
-        </span>
-    </form>
 </td>
+
 
 
                                 <td>{{ $client->created_at->format('d M Y') }}</td>
@@ -133,7 +129,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     Apakah Anda yakin ingin menghapus klien 
-                                                    <strong>{{ $client->nama }}</strong>?
+                                                    <strong>{{ $client->nama_brand }}</strong>?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -166,8 +162,8 @@
            <!-- Pagination -->
 @if($clients->hasPages())
     <div class="d-flex justify-content-between align-items-center mt-4">
-        <div class="text-muted">
-            Menampilkan {{ $clients->firstItem() }} - {{ $clients->lastItem() }} dari {{ $clients->total() }} klien
+     <div class="text-muted">
+           <!-- Menampilkan {{ $clients->firstItem() }} - {{ $clients->lastItem() }} dari {{ $clients->total() }} klien -->
         </div>
         <nav aria-label="Page navigation">
             {{ $clients->withQueryString()->links('pagination.bootstrap-4') }}

@@ -47,49 +47,74 @@
         </div>
 
  <!-- Recent Client -->
+<!-- Recent Client -->
 <div class="col-md-6">
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">
-                Recent Client 
+                Recent Client
             </h6>
-            <span class="badge badge-primary">{{ $recentClients->count() }} Clients</span>
+            <span class="badge badge-primary">
+                {{ $recentClients->count() }} Clients
+            </span>
         </div>
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-sm table-hover">
                     <thead>
                         <tr>
-                            <th>Nama</th>
+                            <th>Nama Brand</th>
                             <th>Kategori</th>
                             <th>Tanggal</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($recentClients as $client)
+                        @forelse($recentClients as $client)
                         <tr>
                             <td>
-                                <div class="font-weight-bold">{{ $client->name }}</div>
-                                <small class="text-muted">{{ Str::limit($client->email, 20) }}</small>
+                                <div class="font-weight-bold">
+                                    {{ $client->nama_brand ?? $client->name }}
+                                </div>
+                                @if($client->email)
+                                    <small class="text-muted">
+                                        {{ \Illuminate\Support\Str::limit($client->email, 20) }}
+                                    </small>
+                                @endif
                             </td>
+
                             <td>
-                                <span class="font-weight-bold">{{ $client->category }}</span>
+                                <span class="font-weight-bold">
+                                    {{ $client->category }}
+                                </span>
                             </td>
+
                             <td>
-                                <small>{{ \Carbon\Carbon::parse($client->join_date)->format('d/m/Y') }}</small>
+                                <small>
+                                    {{ $client->created_at->format('d/m/Y') }}
+                                </small>
                             </td>
+
                             <td>
-                                <span class="badge badge-{{ $client->status == 'active' ? 'active' : 'inactive' }}">
-                                    {{ $client->status }}
+                                <span class="badge 
+                                    {{ $client->status === 'aktif' ? 'badge-active' : 'badge-inactive' }}">
+                                    {{ ucfirst($client->status) }}
                                 </span>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                Belum ada client terbaru
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
-            <div class="text-center mt-9">
+
+            <div class="text-center mt-3">
                 <a href="{{ route('data-client.index') }}" class="btn btn-sm btn-primary">
                     <i class="fas fa-list mr-1"></i> Lihat Semua Client
                 </a>
@@ -97,6 +122,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Quick Actions -->
 <div class="bg-white rounded-xl shadow p-6 mb-8">

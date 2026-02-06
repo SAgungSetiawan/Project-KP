@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->text('address')->nullable();
             $table->string('category')->default('Basic');
-            $table->date('join_date');
-            $table->string('status')->default('active');
+            $table->date('start_date');
+            $table->date('expired_date');
+            $table->string('status')->default('aktif');
             $table->text('notes')->nullable();
             $table->timestamps();
         });

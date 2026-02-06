@@ -21,7 +21,7 @@
     /* BAGIAN KIRI */
     .left-side {
         width: 50%;
-        background: url("{{ asset('image/pict1.jpeg') }}") no-repeat center center / cover;
+        background: url("{{ asset('image/login.jpg') }}") no-repeat center center / cover;
         position: relative;
         color: white;
         padding: 40px;

@@ -35,7 +35,10 @@
                 </div>
             @endif
 
-            <form action="{{ route('add-clients.store') }}" method="POST">
+            <form action="{{ route('add-clients.store') }}" 
+      method="POST" 
+      enctype="multipart/form-data">
+
                 @csrf
                 
                 <div class="row">
@@ -128,7 +131,7 @@
                             <textarea class="form-control @error('address') is-invalid @enderror" 
                                       id="address" 
                                       name="address" 
-                                      rows="2">{{ old('address') }}</textarea>
+                                      rows="1">{{ old('address') }}</textarea>
                             @error('address')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -136,37 +139,40 @@
 
                         <!-- Tanggal Bergabung -->
                         <div class="form-group">
-                            <label for="join_date">Tanggal Bergabung <span class="text-danger">*</span></label>
+                            <label for="start_date">Tanggal Mulai <span class="text-danger">*</span></label>
                             <input type="date" 
-                                   class="form-control @error('join_date') is-invalid @enderror" 
-                                   id="join_date" 
-                                   name="join_date" 
-                                   value="{{ old('join_date', date('Y-m-d')) }}"
+                                   class="form-control @error('start_date') is-invalid @enderror" 
+                                   id="start_date" 
+                                   name="start_date" 
+                                   value="{{ old('start_date', date('Y-m-d')) }}"
                                    required>
-                            @error('join_date')
+                            @error('start_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <!-- Status -->
-                        <div class="form-group">
-                            <label for="status">Status <span class="text-danger">*</span></label>
-                            <select class="form-control @error('status') is-invalid @enderror" 
-                                    id="status" 
-                                    name="status" 
-                                    required>
-                                <option value="">Pilih Status</option>
-                                @foreach($statuses as $key => $status)
-                                    <option value="{{ $key }}" 
-                                            {{ old('status') == $key ? 'selected' : '' }}>
-                                        {{ $status }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        <!-- Durasi Langganan -->
+<div class="form-group">
+    <label for="duration">Durasi Langganan <span class="text-danger">*</span></label>
+    <select class="form-control @error('duration') is-invalid @enderror"
+            id="duration"
+            name="duration"
+            required>
+        <option value="">Pilih Durasi</option>
+        <option value="1" {{ old('duration') == 1 ? 'selected' : '' }}>1 Bulan</option>
+        <option value="2" {{ old('duration') == 2 ? 'selected' : '' }}>2 Bulan</option>
+        <option value="3" {{ old('duration') == 3 ? 'selected' : '' }}>3 Bulan</option>
+        <option value="6" {{ old('duration') == 6 ? 'selected' : '' }}>6 Bulan</option>
+        <option value="12" {{ old('duration') == 12 ? 'selected' : '' }}>12 Bulan</option>
+    </select>
+    @error('duration')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+                        
+
+                    
 
                         <!-- Catatan -->
                         <div class="form-group">
@@ -174,11 +180,28 @@
                             <textarea class="form-control @error('notes') is-invalid @enderror" 
                                       id="notes" 
                                       name="notes" 
-                                      rows="2">{{ old('notes') }}</textarea>
+                                      rows="1">{{ old('notes') }}</textarea>
                             @error('notes')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Upload Invoice -->
+<div class="form-group">
+    <label for="invoice_file">Upload Invoice</label>
+    <input type="file"
+           class="form-control @error('invoice_file') is-invalid @enderror"
+           id="invoice_file"
+           name="invoice_file"
+           accept=".pdf,.jpg,.jpeg,.png">
+    @error('invoice_file')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    <small class="text-muted">
+        Format: PDF, JPG, PNG (Max 2MB)
+    </small>
+</div>
+
                     </div>
                 </div>
 
@@ -217,7 +240,7 @@
 <script>
     // Set tanggal hari ini sebagai default jika belum diisi
     document.addEventListener('DOMContentLoaded', function() {
-        const joinDateInput = document.getElementById('join_date');
+        const joinDateInput = document.getElementById('start_date');
         if (!joinDateInput.value) {
             joinDateInput.value = new Date().toISOString().split('T')[0];
         }

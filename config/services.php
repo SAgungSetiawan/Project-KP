@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'google' => [
+    'drive_invoice_folder' => env('GOOGLE_DRIVE_INVOICE_FOLDER'),
+],
+
+
 ];

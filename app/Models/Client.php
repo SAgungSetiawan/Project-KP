@@ -4,32 +4,39 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use App\Models\Invoice;
 
 class Client extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'nama_brand',
-        'phone',
-        'email',
-        'address',
-        'category',
-        'join_date',
-        'status',
-        'notes'
-    ];
+    'name',
+    'nama_brand',
+    'phone',
+    'email',
+    'address',
+    'notes',
+    'category',
+    'status',
+    'start_date',
+    'expired_date',
+];
+
 
     protected $casts = [
-        'join_date' => 'date',
+        'start_date'   => 'date',
+        'expired_date' => 'date',
     ];
 
-    // Konstanta untuk kategori
-    const CATEGORY_BASIC = 'Basic';
-    const CATEGORY_GROWTH = 'Growth';
+    /* =========================
+     |  KATEGORI
+     ========================= */
+    const CATEGORY_BASIC    = 'Basic';
+    const CATEGORY_GROWTH   = 'Growth';
     const CATEGORY_BUSINESS = 'Business';
-    const CATEGORY_PREMIUM = 'Premium';
+    const CATEGORY_PREMIUM  = 'Premium';
 
     public static function getCategories()
     {
@@ -41,15 +48,43 @@ class Client extends Model
         ];
     }
 
-    // Konstanta untuk status
-    const STATUS_ACTIVE = 'active';
-    const STATUS_INACTIVE = 'inactive';
+    /* =========================
+     |  STATUS
+     ========================= */
+    const STATUS_ACTIVE       = 'aktif';
+    const STATUS_INACTIVE     = 'non aktif';
+    const STATUS_NOT_STARTED  = 'belum aktif';
 
-    public static function getStatuses()
+    /**
+     * STATUS OTOMATIS + MANUAL OVERRIDE
+     */
+    public function getAutoStatusAttribute()
     {
-        return [
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',
-        ];
+        // 🔥 MANUAL OVERRIDE
+        if (in_array($this->status, [
+            self::STATUS_ACTIVE,
+            self::STATUS_INACTIVE,
+        ])) {
+            return $this->status;
+        }
+
+        $today = now()->startOfDay();
+
+        if ($today->lt($this->start_date)) {
+            return self::STATUS_NOT_STARTED;
+        }
+
+        if ($today->gt($this->expired_date)) {
+            return self::STATUS_INACTIVE;
+        }
+
+        return self::STATUS_ACTIVE;
     }
+
+    public function invoices()
+{
+    return $this->hasMany(Invoice::class);
+}
+
+
 }

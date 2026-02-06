@@ -4,149 +4,173 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h3 class="mb-1">Edit Client: {{ $client->nama }}</h3>
-                    <p class="text-muted mb-0">Perbarui data client</p>
+    <div class="d-flex align-items-center mb-4">
+        <a href="{{ route('data-client.index') }}" class="btn btn-outline-secondary me-3">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+        <div>
+            <h3 class="mb-0">Edit Client {{ $client->nama_brand }}</h3>
+            <p class="text-muted mb-0">Edit sebagian data client bila diperlukan</p>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-                <a href="{{ route('data-client.index') }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i> Kembali
-                </a>
-            </div>
+            @endif
 
-            <!-- Card Form -->
-            <div class="card shadow">
-                <div class="card-body">
-                    <!-- Alert Error Validation -->
-                    @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Terdapat kesalahan:</strong>
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
+            <form action="{{ route('data-client.update', $client->id) }}" 
+                  method="POST" 
+                  enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-                    <!-- Form Edit -->
-                    <form action="{{ route('data-client.update', $client->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        
-                        <!-- Nama & Email -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="nama" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                                <input type="text" 
-                                       class="form-control @error('nama') is-invalid @enderror" 
-                                       id="nama" 
-                                       name="nama" 
-                                       value="{{ old('nama', $client->nama) }}" 
-                                       required>
-                                @error('nama')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                <input type="email" 
-                                       class="form-control @error('email') is-invalid @enderror" 
-                                       id="email" 
-                                       name="email" 
-                                       value="{{ old('email', $client->email) }}"
-                                       required>
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <!-- Telepon & Perusahaan -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="telepon" class="form-label">Nomor Telepon <span class="text-danger">*</span></label>
-                                <input type="text" 
-                                       class="form-control @error('telepon') is-invalid @enderror" 
-                                       id="telepon" 
-                                       name="telepon" 
-                                       value="{{ old('telepon', $client->telepon) }}"
-                                       required>
-                                @error('telepon')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label for="perusahaan" class="form-label">Perusahaan <span class="text-danger">*</span></label>
-                                <input type="text" 
-                                       class="form-control @error('perusahaan') is-invalid @enderror" 
-                                       id="perusahaan" 
-                                       name="perusahaan" 
-                                       value="{{ old('perusahaan', $client->perusahaan) }}"
-                                       required>
-                                @error('perusahaan')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <!-- Alamat -->
-                        <div class="mb-3">
-                            <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control @error('alamat') is-invalid @enderror" 
-                                      id="alamat" 
-                                      name="alamat" 
-                                      rows="3">{{ old('alamat', $client->alamat) }}</textarea>
-                            @error('alamat')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                <!-- Nama & Brand -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Nama Lengkap</label>
+                        <input type="text" name="name" class="form-control"
+                               value="{{ old('name', $client->name) }}">
+                    </div>
 
-                        <!-- Status -->
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-control @error('status') is-invalid @enderror" 
-                                    id="status" 
-                                    name="status" 
-                                    required>
-                                <option value="active" {{ old('status', $client->status) == 'aktif' ? 'selected' : '' }}>Active</option>
-                                <option value="nonactive" {{ old('status', $client->status) == 'nonaktif' ? 'selected' : '' }}>Non-Aktif</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        
-                        <!-- Buttons -->
-                        <div class="d-flex justify-content-end gap-2">
-                            <a href="{{ route('data-client.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-times me-2"></i> Batal
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check-circle me-2"></i> Update Client
-                            </button>
-                        </div>
-                    </form>
+                    <div class="col-md-6">
+                        <label>Nama Brand</label>
+                        <input type="text" name="nama_brand" class="form-control"
+                               value="{{ old('nama_brand', $client->nama_brand) }}">
+                    </div>
                 </div>
-            </div>
+
+                <!-- Phone & Email -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Phone</label>
+                        <input type="text" name="phone" class="form-control"
+                               value="{{ old('phone', $client->phone) }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control"
+                               value="{{ old('email', $client->email) }}">
+                    </div>
+                </div>
+
+                 <!-- Category (DROPDOWN DARI MODEL) -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                    <label>Category</label>
+                    <select name="category" class="form-control">
+                        @foreach(\App\Models\Client::getCategories() as $category)
+                            <option value="{{ $category }}"
+                                {{ old('category', $client->category) == $category ? 'selected' : '' }}>
+                                {{ $category }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <!-- Status -->
+                 <div class="col-md-6">
+    <label>Status</label>
+    <select name="status" class="form-control">
+
+        <option value="{{ \App\Models\Client::STATUS_ACTIVE }}"
+            {{ $client->status === \App\Models\Client::STATUS_ACTIVE ? 'selected' : '' }}>
+            Aktif
+        </option>
+
+        <option value="{{ \App\Models\Client::STATUS_INACTIVE }}"
+            {{ $client->status === \App\Models\Client::STATUS_INACTIVE ? 'selected' : '' }}>
+            Non Aktif
+        </option>
+    </select>
+</div>
+                </div>
+
+                <!-- TANGGAL (TIDAK WAJIB DIUBAH) -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Start Date</label>
+                        <input type="date" name="start_date" class="form-control"
+                               value="{{ old('start_date', $client->start_date?->format('Y-m-d')) }}">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengubah</small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Expired Date</label>
+                        <input type="date" name="expired_date" class="form-control"
+                               value="{{ old('expired_date', $client->expired_date?->format('Y-m-d')) }}">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengubah</small>
+                    </div>
+                </div>
+
+                
+<!-- Address -->
+                <div class="mb-1.5">
+                    <label>Address</label>
+                    <textarea name="address" class="form-control" rows="3">{{ old('address', $client->address) }}</textarea>
+                </div>
+
+
+
+                <!-- Notes -->
+                <div class="mb-1.5">
+                    <label>Notes</label>
+                    <textarea name="notes" class="form-control" rows="3">{{ old('notes', $client->notes) }}</textarea>
+                </div>
+
+                <!-- INVOICE -->
+<div class="mb-4">
+    <label>Invoice</label>
+
+    @if($client->invoices->count())
+        <div class="mb-3">
+            @foreach($client->invoices as $invoice)
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <i class="fas fa-file-pdf text-danger"></i>
+                        {{ $invoice->file_original_name }}
+                        <small class="text-muted">
+                            ({{ number_format($invoice->file_size / 1024, 2) }} KB)
+                        </small>
+                    </div>
+                    <div>
+                        <a href="{{ route('invoices.show', $invoice->id) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-outline-primary">
+                            Lihat
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p class="text-muted">Belum ada invoice</p>
+    @endif
+
+    <input type="file" name="invoice" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+    <small class="text-muted">Upload hanya jika ingin mengganti invoice (PDF, JPG, PNG, max 2MB)</small>
+</div>
+
+                <!-- BUTTON -->
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ route('data-client.index') }}" class="btn btn-secondary">
+                        Batal
+                    </a>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-save"></i> Update
+                    </button>
+                </div>
+
+            </form>
         </div>
     </div>
 </div>
-
-@push('styles')
-<style>
-    .gap-2 {
-        gap: 0.5rem !important;
-    }
-    .me-2 {
-        margin-right: 0.5rem;
-    }
-</style>
-@endpush
 @endsection
