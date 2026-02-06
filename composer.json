@@ -36,9 +36,8 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "@php artisan key:generate --force",
-            "@php artisan storage:link"
-        ],
+  "@php artisan storage:link"
+],
         "post-deploy": [
             "@php artisan migrate --force",
             "@php artisan config:cache",
@@ -79,7 +78,7 @@
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ]
-        
+
     },
     "extra": {
         "laravel": {
