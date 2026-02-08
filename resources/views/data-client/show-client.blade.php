@@ -49,7 +49,7 @@
                                 <td>: 
                                     @if($client->phone)
                                         <a href="tel:{{ $client->phone }}">{{ $client->phone }}</a>
-                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $client->phone) }}" 
+                                        <a href="https://wa.me/+62{{ preg_replace('/[^0-9]/', '', $client->phone) }}" 
                                            target="_blank" 
                                            class="btn btn-sm btn-success ms-2">
                                             <i class="fab fa-whatsapp"></i> WhatsApp
